@@ -1,0 +1,24 @@
+replicaCount: 1
+
+image:
+  repository: local/app
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+podAnnotations: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+app:
+  env:
+  - name: TEST
+    value: "test"
+
+postgresql:
+  image: postgres:13.3
+  connection: "postgresql://fake"
+  service:
+    port: 5432
+

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "devops-ass.fullname" . }}-postgres
+  labels:
+    app: {{ include "devops-ass.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "devops-ass.dbSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "devops-ass.dbSelectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.postgresql.image }}
+          ports:
+            - containerPort: {{ .Values.postgresql.service.port }}
+          volumeMounts:
+          - name: postgresql-data
+            mountPath: /var/lib/postgresql/data
+      volumes:
+      - metadata:
+        name: postgresql-data
+        emptdyDir: {}
